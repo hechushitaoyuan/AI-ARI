@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI vs Real</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <img id="logo" src="00TJAD-logo.png" alt="Logo">
+        <h1>真假AI建筑师</h1>
+        <div id="header-controls" class="hidden">
+            <button id="header-restart-btn">重新开始</button>
+            <span id="question-counter"></span>
+            <span id="timer-label">倒计时: </span>
+            <span id="timer"></span>
+        </div>
+    </header>
+
+    <main id="game-container">
+        <div id="start-screen">
+            <h2>点击左上角 Logo 开始答题</h2>
+            <div class="rules-container">
+                <h3>答题规则</h3>
+                <p>1. 游戏共 5 题，每题作答时间为 30 秒。</p>
+                <p>2. 请在两张图片中，点击你认为是真实场景的图片。</p>
+                <p>3. 超时未作答将计为错误并自动进入下一题。</p>
+                <p>4. 全部题目回答完毕后，将显示您的最终得分和答题详情。</p>
+            </div>
+        </div>
+
+        <div id="game-screen" class="hidden">
+            <div class="image-container">
+                <div class="image-wrapper">
+                    <img id="image1" src="" alt="Image 1">
+                </div>
+                <div class="image-wrapper">
+                    <img id="image2" src="" alt="Image 2">
+                </div>
+            </div>
+            <div id="intro-text"></div>
+        </div>
+
+        <div id="end-screen" class="hidden">
+            <h2>谢谢参与</h2>
+            <p id="final-score"></p>
+            <div id="results-container"></div>
+            <button id="restart-btn">再来一次</button>
+        </div>
+    </main>
+
+    <script src="script.js?v=9"></script>
+</body>
+</html>

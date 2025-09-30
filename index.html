@@ -8,20 +8,33 @@
 </head>
 <body>
     <header>
-        <img id="logo" src="00TJAD-logo.png" alt="Logo">
-        <h1>真假AI建筑师</h1>
-        <div id="header-controls" class="hidden">
-            <button id="header-restart-btn">重新开始</button>
-            <span id="question-counter"></span>
-            <span id="timer-label">倒计时: </span>
-            <span id="timer"></span>
+        <div class="header-content">
+            <div class="header-left">
+                <div id="timer-container" class="hidden">
+                    <span id="timer-label">倒计时: </span>
+                    <span id="timer"></span>
+                </div>
+            </div>
+            <div class="header-center">
+                <img src="00Tjad/title@1x.png" alt="真假建筑师" class="main-title-img">
+
+            </div>
+            <div class="header-right">
+                <div id="score-display">
+                    <p>五题三胜</p>
+                    <p>答对有奖</p>
+                    <span id="question-counter">0/5</span>
+                </div>
+            </div>
         </div>
     </header>
 
     <main id="game-container">
         <div id="start-screen">
-            <h2>点击左上角 Logo 开始答题</h2>
-            <div class="rules-container">
+            <div class="start-content">
+                <button id="start-game-btn" class="action-button">我要参与</button>
+            </div>
+            <div class="rules-container hidden">
                 <h3>答题规则</h3>
                 <p>1. 游戏共 5 题，每题作答时间为 30 秒。</p>
                 <p>2. 请在两张图片中，点击你认为是真实场景的图片。</p>
@@ -34,22 +47,32 @@
             <div class="image-container">
                 <div class="image-wrapper">
                     <img id="image1" src="" alt="Image 1">
+                    <div class="overlay" id="overlay1">
+                        <p class="overlay-text"></p>
+                    </div>
                 </div>
                 <div class="image-wrapper">
                     <img id="image2" src="" alt="Image 2">
+                    <div class="overlay" id="overlay2">
+                        <p class="overlay-text"></p>
+                    </div>
                 </div>
             </div>
             <div id="intro-text"></div>
         </div>
 
         <div id="end-screen" class="hidden">
-            <h2>谢谢参与</h2>
-            <p id="final-score"></p>
-            <div id="results-container"></div>
-            <button id="restart-btn">再来一次</button>
+            <p id="end-message"></p>
+            <button id="restart-btn" class="action-button">我要参与</button>
+            <p id="final-score" class="hidden"></p>
+            <div id="results-container" class="hidden"></div>
         </div>
     </main>
 
     <script src="script.js?v=9"></script>
+    <footer>
+        <img src="00Tjad/tongji logo5@1x.png" alt="TJAD Logo" class="footer-logo" id="logo">
+        <img src="00Tjad/tongjiAI logo@1x.png" alt="TJAD Digital & AI Group Logo" class="footer-logo">
+    </footer>
 </body>
 </html>

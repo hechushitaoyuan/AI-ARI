@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
-    const logo = document.getElementById('logo');
-    const headerControls = document.getElementById('header-controls');
-    const headerRestartBtn = document.getElementById('header-restart-btn');
+    // DOM Elements
+    const logo = document.getElementById('logo'); // Footer logo
     const questionCounter = document.getElementById('question-counter');
     const timerEl = document.getElementById('timer');
+    const timerContainer = document.getElementById('timer-container'); // Get the timer container
     const startScreen = document.getElementById('start-screen');
     const gameScreen = document.getElementById('game-screen');
     const endScreen = document.getElementById('end-screen');
@@ -14,6 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const finalScoreEl = document.getElementById('final-score');
     const resultsContainer = document.getElementById('results-container');
     const restartBtn = document.getElementById('restart-btn');
+    const startGameBtn = document.getElementById('start-game-btn'); // New start button
+    const endMessageEl = document.getElementById('end-message'); // New end message element
+
+    const overlay1 = document.getElementById('overlay1');
+    const overlay2 = document.getElementById('overlay2');
+    const overlayText1 = overlay1.querySelector('.overlay-text');
+    const overlayText2 = overlay2.querySelector('.overlay-text');
 
     // Game State
     const TOTAL_QUESTIONS = 5;
@@ -25,13 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let score = 0;
     let userAnswers = [];
     let countdownInterval;
+    let imagesClickable = true; // Control image clickability
 
     // --- Event Listeners ---
-    logo.addEventListener('click', startGame);
-    restartBtn.addEventListener('click', startGame);
-    headerRestartBtn.addEventListener('click', startGame);
-    image1.addEventListener('click', () => handleImageClick(image1));
-    image2.addEventListener('click', () => handleImageClick(image2));
+    startGameBtn.addEventListener('click', startGame); // Use new start button
+    restartBtn.addEventListener('click', startGame); // Restart button on end screen
+    image1.addEventListener('click', () => handleImageClick(image1, overlay1, overlayText1));
+    image2.addEventListener('click', () => handleImageClick(image2, overlay2, overlayText2));
 
     // --- Game Flow ---
 
@@ -41,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         score = 0;
         userAnswers = [];
         if (countdownInterval) clearInterval(countdownInterval);
+        imagesClickable = true;
 
         // 2. Prepare questions
         questions = shuffleArray(allImageNames).slice(0, TOTAL_QUESTIONS);
@@ -49,7 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
         startScreen.classList.add('hidden');
         endScreen.classList.add('hidden');
         gameScreen.classList.remove('hidden');
-        headerControls.classList.remove('hidden');
+        timerContainer.classList.remove('hidden'); // Show timer
+
+        // Hide overlays
+        overlay1.classList.remove('show', 'correct', 'incorrect');
+        overlay2.classList.remove('show', 'correct', 'incorrect');
 
         // 4. Display first question
         displayQuestion();
@@ -61,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        questionCounter.textContent = `第 ${currentQuestionIndex + 1}/${TOTAL_QUESTIONS} 题`;
+        questionCounter.textContent = `${score}/${currentQuestionIndex + 1}`; // Update score display: correct answers / current question number
 
         const imageName = questions[currentQuestionIndex];
         const realImagePath = `01Real/${imageName}.png`;
@@ -74,6 +86,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         image2.src = isRealLeft ? aiImagePath : realImagePath;
         image2.dataset.isReal = !isRealLeft;
+
+        // Reset overlays for new question
+        overlay1.classList.remove('show', 'correct', 'incorrect');
+        overlay2.classList.remove('show', 'correct', 'incorrect');
+        overlayText1.textContent = '';
+        overlayText2.textContent = '';
+        imagesClickable = true; // Re-enable clicks
 
         // Fetch and display intro text
         try {
@@ -91,21 +110,41 @@ document.addEventListener('DOMContentLoaded', () => {
         startTimer();
     }
 
-    function handleImageClick(clickedImage) {
+    function handleImageClick(clickedImage, overlay, overlayText) {
+        if (!imagesClickable) return; // Prevent multiple clicks
+        imagesClickable = false; // Disable clicks after first selection
+
         clearInterval(countdownInterval);
         const isCorrect = clickedImage.dataset.isReal === 'true';
         
         userAnswers.push({
             question: questions[currentQuestionIndex],
-            correct: isCorrect
+            correct: isCorrect,
+            selectedImage: clickedImage.id // Store which image was clicked
         });
 
         if (isCorrect) {
             score++;
+            overlayText.textContent = `正确
+这是真实照片`;
+            overlay.classList.add('correct');
+        } else {
+            overlayText.textContent = `抱歉
+这是AI生成的`;
+            overlay.classList.add('incorrect');
         }
+        overlay.classList.add('show');
 
-        currentQuestionIndex++;
-        displayQuestion();
+        // Hide the other overlay if it was shown (shouldn't be with new logic, but for safety)
+        const otherOverlay = clickedImage === image1 ? overlay2 : overlay1;
+        otherOverlay.classList.remove('show', 'correct', 'incorrect');
+        otherOverlay.querySelector('.overlay-text').textContent = '';
+
+
+        setTimeout(() => {
+            currentQuestionIndex++;
+            displayQuestion();
+        }, 2000); // Show feedback for 2 seconds
     }
 
     function startTimer() {
@@ -131,16 +170,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function endGame() {
         gameScreen.classList.add('hidden');
-        headerControls.classList.add('hidden');
         endScreen.classList.remove('hidden');
+        timerContainer.classList.add('hidden'); // Hide timer
 
-        finalScoreEl.textContent = `你的得分: ${score} / ${TOTAL_QUESTIONS}`;
+        // Determine end message based on score
+        if (score >= 3) { // Assuming 3 correct answers for "win"
+            endMessageEl.textContent = `恭喜！你答对了${score}题，请去前台领奖`;
+        } else {
+            endMessageEl.textContent = `抱歉！你只答对了${score}题，继续努力`;
+        }
 
-        resultsContainer.innerHTML = '<h3>答题详情:</h3>';
-        userAnswers.forEach((answer, index) => {
-            const result = answer.correct ? '正确' : (answer.timeout ? '超时' : '错误');
-            resultsContainer.innerHTML += `<p>第 ${index + 1} 题 (图片 ${answer.question}): ${result}</p>`;
-        });
+        // Optionally show detailed results
+        // finalScoreEl.textContent = `你的得分: ${score} / ${TOTAL_QUESTIONS}`;
+        // resultsContainer.innerHTML = '<h3>答题详情:</h3>';
+        // userAnswers.forEach((answer, index) => {
+        //     const result = answer.correct ? '正确' : (answer.timeout ? '超时' : '错误');
+        //     resultsContainer.innerHTML += `<p>第 ${index + 1} 题 (图片 ${answer.question}): ${result}</p>`;
+        // });
     }
 
     // --- Utility Functions ---

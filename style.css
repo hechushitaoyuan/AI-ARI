@@ -16,7 +16,7 @@ body {
     color: #fff; /* White text */
     width: 1920px; /* Fixed width */
     height: 1080px; /* Fixed height */
-    /* overflow: hidden; */ /* Temporarily remove to debug layout issues */
+    overflow: auto; /* Allow scrolling if content exceeds dimensions */
     box-sizing: border-box;
     position: relative;
     transform-origin: top left;
@@ -106,7 +106,7 @@ main {
     flex-grow: 1; /* Allow main to grow and take available space */
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around; /* Distribute space around items within main */
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
@@ -172,7 +172,7 @@ main {
     gap: 20px;
     width: 100%;
     max-width: 1200px; /* Limit the total width of the image container */
-    height: 600px; /* Fixed height for the image container */
+    height: 540px; /* Fixed height for image container (1080px / 2) */
     margin-top: 20px;
 }
 
@@ -239,8 +239,8 @@ main {
 #intro-text {
     margin-top: 20px;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1); /* Revert to original background */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Revert to original border */
     border-radius: 8px;
     width: 100%;
     max-width: 1200px; /* Match image container width */
@@ -249,6 +249,7 @@ main {
     text-align: left;
     color: #fff;
     flex-shrink: 0; /* Prevent it from shrinking */
+    /* display: block !important; */ /* Remove if not needed after layout fix */
 }
 
 #timer-container {

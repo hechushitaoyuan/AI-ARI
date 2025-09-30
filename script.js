@@ -98,13 +98,17 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch(`03Intro/${imageName}.txt`);
             if (response.ok) {
-                introText.textContent = await response.text();
+                const text = await response.text();
+                introText.textContent = text;
             } else {
-                introText.textContent = '';
+                // Handle cases where the file might not be found on the server
+                introText.textContent = '介绍文本加载失败。';
             }
         } catch (error) {
             console.error('Error fetching introduction:', error);
-            introText.textContent = '';
+            // This error often happens when opening the file directly in the browser
+            // instead of using a local server.
+            introText.textContent = '无法加载介绍文本。请确认您是否通过HTTP服务器运行本项目。';
         }
 
         startTimer();

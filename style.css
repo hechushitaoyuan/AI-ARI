@@ -81,7 +81,7 @@ header h2 {
     display: flex;
     justify-content: flex-end;
     position: relative;
-    right: 50px; /* Move further left */
+    right: 100px; /* Move further left */
 }
 
 #score-display {
@@ -90,11 +90,13 @@ header h2 {
     gap: 20px;
     font-size: 22px; /* Increase font size */
     line-height: 1.2;
+    font-family: 'AlimamaShuHeiTi-Bold', sans-serif;
 }
 
 #score-display p {
     margin: 0;
     text-align: right;
+    font-size: 36px; /* Match number size */
 }
 
 #question-counter {
@@ -116,7 +118,7 @@ main {
     box-sizing: border-box;
     min-height: 0;
     position: relative;
-    bottom: 80px; /* Move main content up further */
+    bottom: 50px; /* Adjust vertical position */
 }
 
 .hidden {
@@ -133,7 +135,7 @@ main {
 }
 
 .start-content {
-    margin-top: 250px; /* Move button down */
+    margin-top: 80px; /* Adjust spacing */
 }
 
 .action-button {
@@ -148,16 +150,12 @@ main {
 }
 
 .rules-container {
-    margin-top: 40px;
     padding: 20px;
     max-width: 600px;
-    text-align: left;
+    text-align: center; /* Center the rules text */
     color: #fff;
     font-family: 'AlimamaShuHeiTi-Bold', sans-serif;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    margin-bottom: 50px; /* Add space between rules and button */
 }
 
 .rules-container h3 {
@@ -176,11 +174,11 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 40px; /* Adjusted gap */
+    gap: 40px;
     width: 100%;
-    max-width: 1200px; /* Reduced max-width */
-    height: 55vh; /* Reduced height */
-    margin-top: 20px; /* Adjusted margin */
+    max-width: 1400px; /* Widen the container */
+    height: 55vh;
+    margin-top: 20px;
 }
 
 .image-wrapper {
@@ -195,7 +193,7 @@ main {
 .image-container img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Final change to unify clickable area and image */
+    object-fit: contain; /* Revert to contain to show full image */
     display: block;
     cursor: pointer;
     transition: transform 0.3s ease;
@@ -250,7 +248,7 @@ main {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     width: 100%;
-    max-width: 1200px; /* Match image container width */
+    max-width: 1400px; /* Widen the text area */
     box-sizing: border-box;
     min-height: 100px;
     color: #fff;
@@ -260,14 +258,16 @@ main {
     align-items: center;
     font-size: 20px;
     line-height: 1.6;
+    font-family: 'AlimamaShuHeiTi-Bold', sans-serif;
 }
 
 #timer-container {
-    font-size: 32px; /* Increase font size */
+    font-size: 32px;
     font-weight: bold;
     color: #fff;
     position: relative;
-    left: 20px; /* Move to the right */
+    left: 80px; /* Move further to the right */
+    font-family: 'AlimamaShuHeiTi-Bold', sans-serif;
 }
 
 #timer {
@@ -309,7 +309,7 @@ main {
 footer {
     width: 100%;
     max-width: 1920px;
-    padding: 15px 80px 15px 80px; /* Adjust padding to move logos */
+    padding: 15px 120px; /* Adjust padding to move logos inwards */
     display: flex;
     justify-content: space-between;
     align-items: center;

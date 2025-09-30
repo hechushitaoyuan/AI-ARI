@@ -37,8 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Event Listeners ---
     startGameBtn.addEventListener('click', startGame); // Use new start button
     restartBtn.addEventListener('click', startGame); // Restart button on end screen
-    image1.addEventListener('click', () => handleImageClick(image1, overlay1, overlayText1));
-    image2.addEventListener('click', () => handleImageClick(image2, overlay2, overlayText2));
+    image1.addEventListener('click', (event) => handleImageClick(image1, overlay1, overlayText1, event));
+    image2.addEventListener('click', (event) => handleImageClick(image2, overlay2, overlayText2, event));
+
+    // Adjust overlays whenever an image loads
+    image1.onload = () => adjustOverlaySize(image1, overlay1);
+    image2.onload = () => adjustOverlaySize(image2, overlay2);
+    // Also adjust on window resize to handle responsive changes
+    window.addEventListener('resize', () => {
+        if (!gameScreen.classList.contains('hidden')) {
+            adjustOverlaySize(image1, overlay1);
+            adjustOverlaySize(image2, overlay2);
+        }
+    });
 
     // --- Game Flow ---
 
@@ -92,6 +103,15 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay2.classList.remove('show', 'correct', 'incorrect');
         overlayText1.textContent = '';
         overlayText2.textContent = '';
+        // Reset overlay styles to full size before recalculating
+        overlay1.style.width = '100%';
+        overlay1.style.height = '100%';
+        overlay1.style.top = '0';
+        overlay1.style.left = '0';
+        overlay2.style.width = '100%';
+        overlay2.style.height = '100%';
+        overlay2.style.top = '0';
+        overlay2.style.left = '0';
         imagesClickable = true; // Re-enable clicks
 
         // Fetch and display intro text
@@ -114,7 +134,16 @@ document.addEventListener('DOMContentLoaded', () => {
         startTimer();
     }
 
-    function handleImageClick(clickedImage, overlay, overlayText) {
+    function handleImageClick(clickedImage, overlay, overlayText, event) {
+        // Calculate the rendered image dimensions and position
+        const { renderedWidth, renderedHeight, top, left } = getRenderedSize(clickedImage);
+
+        // Check if the click was within the actual image bounds
+        if (event.offsetX < left || event.offsetX > left + renderedWidth ||
+            event.offsetY < top || event.offsetY > top + renderedHeight) {
+            return; // Click was outside the image, do nothing
+        }
+
         if (!imagesClickable) return; // Prevent multiple clicks
         imagesClickable = false; // Disable clicks after first selection
 
@@ -181,9 +210,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Determine end message based on score
         if (score >= 3) { // Assuming 3 correct answers for "win"
-            endMessageEl.textContent = `恭喜！你答对了${score}题，请去前台领奖`;
+            endMessageEl.textContent = `恭喜！您答对了${score}题，请去前台领奖`;
         } else {
-            endMessageEl.textContent = `抱歉！你只答对了${score}题，继续努力`;
+            endMessageEl.textContent = `抱歉！您只答对了${score}题，继续努力`;
         }
 
         // Optionally show detailed results
@@ -203,5 +232,36 @@ document.addEventListener('DOMContentLoaded', () => {
             [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
         }
         return newArr;
+    }
+
+    function getRenderedSize(img) {
+        const container = img.parentElement;
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
+        const imageAspectRatio = img.naturalWidth / img.naturalHeight;
+        const containerAspectRatio = containerWidth / containerHeight;
+
+        let renderedWidth, renderedHeight, top, left;
+
+        if (imageAspectRatio > containerAspectRatio) {
+            renderedWidth = containerWidth;
+            renderedHeight = containerWidth / imageAspectRatio;
+            top = (containerHeight - renderedHeight) / 2;
+            left = 0;
+        } else {
+            renderedHeight = containerHeight;
+            renderedWidth = containerHeight * imageAspectRatio;
+            left = (containerWidth - renderedWidth) / 2;
+            top = 0;
+        }
+        return { renderedWidth, renderedHeight, top, left };
+    }
+
+    function adjustOverlaySize(img, overlay) {
+        const { renderedWidth, renderedHeight, top, left } = getRenderedSize(img);
+        overlay.style.width = `${renderedWidth}px`;
+        overlay.style.height = `${renderedHeight}px`;
+        overlay.style.top = `${top}px`;
+        overlay.style.left = `${left}px`;
     }
 });

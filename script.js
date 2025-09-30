@@ -135,11 +135,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         overlay.classList.add('show');
 
-        // Hide the other overlay if it was shown (shouldn't be with new logic, but for safety)
+        // Hide the other overlay
         const otherOverlay = clickedImage === image1 ? overlay2 : overlay1;
         otherOverlay.classList.remove('show', 'correct', 'incorrect');
         otherOverlay.querySelector('.overlay-text').textContent = '';
 
+        // IMMEDIATELY UPDATE SCORE DISPLAY AFTER ANSWERING
+        questionCounter.textContent = `${score}/${currentQuestionIndex + 1}`;
 
         setTimeout(() => {
             currentQuestionIndex++;

@@ -16,11 +16,10 @@ body {
     color: #fff; /* White text */
     width: 1920px; /* Fixed width */
     height: 1080px; /* Fixed height */
-    overflow: hidden; /* Hide overflow if content exceeds dimensions */
+    /* overflow: hidden; */ /* Temporarily remove to debug layout issues */
     box-sizing: border-box;
     position: relative;
-    /* Optional: Add scaling for smaller screens if needed, e.g., using transform: scale() */
-    transform-origin: top left; /* Scale from top-left corner */
+    transform-origin: top left;
 }
 
 
@@ -104,13 +103,14 @@ main {
     width: 100%;
     max-width: 1920px; /* Match body width */
     text-align: center;
-    flex-grow: 1;
+    flex-grow: 1; /* Allow main to grow and take available space */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
+    min-height: 0; /* Allow main to shrink if content is too large */
 }
 
 .hidden {
@@ -194,14 +194,7 @@ main {
     transition: transform 0.3s ease;
 }
 
-.image-container img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    display: block;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
+
 
 .image-container img:hover {
     transform: scale(1.02);
@@ -250,10 +243,12 @@ main {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     width: 100%;
+    max-width: 1200px; /* Match image container width */
     box-sizing: border-box;
     min-height: 50px;
     text-align: left;
     color: #fff;
+    flex-shrink: 0; /* Prevent it from shrinking */
 }
 
 #timer-container {
@@ -306,8 +301,9 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: auto; /* Push footer to bottom */
+    /* margin-top: auto; */ /* Removed as body is now a flex container */
     box-sizing: border-box;
+    flex-shrink: 0; /* Prevent footer from shrinking */
 }
 
 .footer-logo {

@@ -40,17 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
     image1.addEventListener('click', () => handleImageClick(image1, overlay1, overlayText1));
     image2.addEventListener('click', () => handleImageClick(image2, overlay2, overlayText2));
 
-    // Adjust overlays whenever an image loads
-    image1.onload = () => adjustOverlaySize(image1, overlay1);
-    image2.onload = () => adjustOverlaySize(image2, overlay2);
-    // Also adjust on window resize to handle responsive changes
-    window.addEventListener('resize', () => {
-        if (!gameScreen.classList.contains('hidden')) {
-            adjustOverlaySize(image1, overlay1);
-            adjustOverlaySize(image2, overlay2);
-        }
-    });
-
     // --- Game Flow ---
 
     function startGame() {
@@ -103,15 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay2.classList.remove('show', 'correct', 'incorrect');
         overlayText1.textContent = '';
         overlayText2.textContent = '';
-        // Reset overlay styles
-        overlay1.style.width = '100%';
-        overlay1.style.height = '100%';
-        overlay1.style.top = '0';
-        overlay1.style.left = '0';
-        overlay2.style.width = '100%';
-        overlay2.style.height = '100%';
-        overlay2.style.top = '0';
-        overlay2.style.left = '0';
         imagesClickable = true; // Re-enable clicks
 
         // Fetch and display intro text
@@ -223,34 +203,5 @@ document.addEventListener('DOMContentLoaded', () => {
             [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
         }
         return newArr;
-    }
-
-    function adjustOverlaySize(img, overlay) {
-        const container = img.parentElement;
-        const containerWidth = container.offsetWidth;
-        const containerHeight = container.offsetHeight;
-        const imageAspectRatio = img.naturalWidth / img.naturalHeight;
-        const containerAspectRatio = containerWidth / containerHeight;
-
-        let renderedWidth, renderedHeight, top, left;
-
-        if (imageAspectRatio > containerAspectRatio) {
-            // Image is wider than the container, so it's constrained by width
-            renderedWidth = containerWidth;
-            renderedHeight = containerWidth / imageAspectRatio;
-            top = (containerHeight - renderedHeight) / 2;
-            left = 0;
-        } else {
-            // Image is taller than or same aspect ratio as the container, so it's constrained by height
-            renderedHeight = containerHeight;
-            renderedWidth = containerHeight * imageAspectRatio;
-            left = (containerWidth - renderedWidth) / 2;
-            top = 0;
-        }
-
-        overlay.style.width = `${renderedWidth}px`;
-        overlay.style.height = `${renderedHeight}px`;
-        overlay.style.top = `${top}px`;
-        overlay.style.left = `${left}px`;
     }
 });

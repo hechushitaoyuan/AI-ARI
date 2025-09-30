@@ -106,7 +106,7 @@ main {
     flex-grow: 1; /* Allow main to grow and take available space */
     display: flex;
     flex-direction: column;
-    justify-content: space-around; /* Distribute space around items within main */
+    justify-content: center; /* Changed to center to fix layout issue */
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
@@ -245,11 +245,15 @@ main {
     width: 100%;
     max-width: 1200px; /* Match image container width */
     box-sizing: border-box;
-    min-height: 50px;
-    text-align: left;
+    min-height: 100px; /* Increased height */
+    text-align: center; /* Center text */
     color: #fff;
     flex-shrink: 0; /* Prevent it from shrinking */
-    /* display: block !important; */ /* Remove if not needed after layout fix */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px; /* Increased font size */
+    line-height: 1.5; /* Added line height for readability */
 }
 
 #timer-container {

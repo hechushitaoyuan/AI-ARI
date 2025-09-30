@@ -118,7 +118,7 @@ main {
     box-sizing: border-box;
     min-height: 0;
     position: relative;
-    bottom: 50px; /* Adjust vertical position */
+    bottom: 100px; /* Move up further */
 }
 
 .hidden {
@@ -176,7 +176,7 @@ main {
     align-items: center;
     gap: 40px;
     width: 100%;
-    max-width: 1400px; /* Widen the container */
+    max-width: 1600px; /* Widen the container further */
     height: 55vh;
     margin-top: 20px;
 }
@@ -248,7 +248,7 @@ main {
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     width: 100%;
-    max-width: 1400px; /* Widen the text area */
+    max-width: 1600px; /* Widen the text area further */
     box-sizing: border-box;
     min-height: 100px;
     color: #fff;

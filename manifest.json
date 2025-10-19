@@ -1,0 +1,32 @@
+[
+  {
+    "real": "01Real/01.png",
+    "ai": "02AI/01.png",
+    "intro": "03Intro/01.txt"
+  },
+  {
+    "real": "01Real/02.png",
+    "ai": "02AI/02.png",
+    "intro": "03Intro/02.txt"
+  },
+  {
+    "real": "01Real/03.jpg",
+    "ai": "02AI/03.jpg",
+    "intro": "03Intro/03.txt"
+  },
+  {
+    "real": "01Real/1.png",
+    "ai": "02AI/1.png",
+    "intro": "03Intro/1.txt"
+  },
+  {
+    "real": "01Real/2.png",
+    "ai": "02AI/2.png",
+    "intro": "03Intro/2.txt"
+  },
+  {
+    "real": "01Real/3.png",
+    "ai": "02AI/3.png",
+    "intro": "03Intro/3.txt"
+  }
+]

@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
-    // DOM Elements
     const logo = document.getElementById('logo'); // Footer logo
     const questionCounter = document.getElementById('question-counter');
     const timerEl = document.getElementById('timer');
@@ -25,25 +24,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // Game State
     const TOTAL_QUESTIONS = 5;
     const TIME_LIMIT = 30;
-    const allImageNames = Array.from({ length: 10 }, (_, i) => `${i + 1}`);
     
+    let allQuestionsData = []; // Will be loaded from manifest.json
     let questions = [];
     let currentQuestionIndex = 0;
     let score = 0;
     let userAnswers = [];
     let countdownInterval;
-    let imagesClickable = true; // Control image clickability
+    let imagesClickable = true;
+
+    // --- Initialization ---
+    async function initializeGame() {
+        try {
+            const response = await fetch('manifest.json');
+            if (!response.ok) {
+                throw new Error('Manifest file not found!');
+            }
+            allQuestionsData = await response.json();
+            // Enable the start button only after data is loaded
+            startGameBtn.addEventListener('click', startGame);
+            restartBtn.addEventListener('click', startGame);
+        } catch (error) {
+            console.error('Failed to load game data:', error);
+            // Display an error message to the user
+            const startContent = document.querySelector('.start-content');
+            startContent.innerHTML = '<p style="color: red;">游戏数据加载失败，请检查manifest.json文件是否存在且格式正确。</p>';
+        }
+    }
 
     // --- Event Listeners ---
-    startGameBtn.addEventListener('click', startGame); // Use new start button
-    restartBtn.addEventListener('click', startGame); // Restart button on end screen
     image1.addEventListener('click', (event) => handleImageClick(image1, overlay1, overlayText1, event));
     image2.addEventListener('click', (event) => handleImageClick(image2, overlay2, overlayText2, event));
-
-    // Adjust overlays whenever an image loads
     image1.onload = () => adjustOverlaySize(image1, overlay1);
     image2.onload = () => adjustOverlaySize(image2, overlay2);
-    // Also adjust on window resize to handle responsive changes
     window.addEventListener('resize', () => {
         if (!gameScreen.classList.contains('hidden')) {
             adjustOverlaySize(image1, overlay1);
@@ -52,29 +65,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Game Flow ---
-
     function startGame() {
-        // 1. Reset state
         currentQuestionIndex = 0;
         score = 0;
         userAnswers = [];
         if (countdownInterval) clearInterval(countdownInterval);
         imagesClickable = true;
 
-        // 2. Prepare questions
-        questions = shuffleArray(allImageNames).slice(0, TOTAL_QUESTIONS);
+        questions = shuffleArray(allQuestionsData).slice(0, TOTAL_QUESTIONS);
         
-        // 3. Update UI
         startScreen.classList.add('hidden');
         endScreen.classList.add('hidden');
         gameScreen.classList.remove('hidden');
-        timerContainer.classList.remove('hidden'); // Show timer
+        timerContainer.classList.remove('hidden');
 
-        // Hide overlays
         overlay1.classList.remove('show', 'correct', 'incorrect');
         overlay2.classList.remove('show', 'correct', 'incorrect');
 
-        // 4. Display first question
         displayQuestion();
     }
 
@@ -84,11 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        questionCounter.textContent = `${score}/${currentQuestionIndex + 1}`; // Update score display: correct answers / current question number
+        questionCounter.textContent = `${score}/${currentQuestionIndex + 1}`;
 
-        const imageName = questions[currentQuestionIndex];
-        const realImagePath = `01Real/${imageName}.png`;
-        const aiImagePath = `02AI/${imageName}.png`;
+        const currentQuestion = questions[currentQuestionIndex];
+        const realImagePath = currentQuestion.real;
+        const aiImagePath = currentQuestion.ai;
+        const introPath = currentQuestion.intro;
 
         const isRealLeft = Math.random() < 0.5;
 
@@ -98,54 +106,37 @@ document.addEventListener('DOMContentLoaded', () => {
         image2.src = isRealLeft ? aiImagePath : realImagePath;
         image2.dataset.isReal = !isRealLeft;
 
-        // Reset overlays for new question
         overlay1.classList.remove('show', 'correct', 'incorrect');
         overlay2.classList.remove('show', 'correct', 'incorrect');
         overlayText1.textContent = '';
         overlayText2.textContent = '';
-        // Reset overlay styles to full size before recalculating
-        overlay1.style.width = '100%';
-        overlay1.style.height = '100%';
-        overlay1.style.top = '0';
-        overlay1.style.left = '0';
-        overlay2.style.width = '100%';
-        overlay2.style.height = '100%';
-        overlay2.style.top = '0';
-        overlay2.style.left = '0';
-        imagesClickable = true; // Re-enable clicks
+        imagesClickable = true;
 
-        // Fetch and display intro text
         try {
-            const response = await fetch(`03Intro/${imageName}.txt`);
+            const response = await fetch(introPath);
             if (response.ok) {
-                const text = await response.text();
-                introText.textContent = text;
+                introText.textContent = await response.text();
             } else {
-                // Handle cases where the file might not be found on the server
                 introText.textContent = '介绍文本加载失败。';
             }
         } catch (error) {
             console.error('Error fetching introduction:', error);
-            // This error often happens when opening the file directly in the browser
-            // instead of using a local server.
-            introText.textContent = '无法加载介绍文本。请确认您是否通过HTTP服务器运行本项目。';
+            introText.textContent = '无法加载介绍文本。';
         }
 
         startTimer();
     }
 
     function handleImageClick(clickedImage, overlay, overlayText, event) {
-        // Calculate the rendered image dimensions and position
         const { renderedWidth, renderedHeight, top, left } = getRenderedSize(clickedImage);
 
-        // Check if the click was within the actual image bounds
         if (event.offsetX < left || event.offsetX > left + renderedWidth ||
             event.offsetY < top || event.offsetY > top + renderedHeight) {
-            return; // Click was outside the image, do nothing
+            return;
         }
 
-        if (!imagesClickable) return; // Prevent multiple clicks
-        imagesClickable = false; // Disable clicks after first selection
+        if (!imagesClickable) return;
+        imagesClickable = false;
 
         clearInterval(countdownInterval);
         const isCorrect = clickedImage.dataset.isReal === 'true';
@@ -153,33 +144,29 @@ document.addEventListener('DOMContentLoaded', () => {
         userAnswers.push({
             question: questions[currentQuestionIndex],
             correct: isCorrect,
-            selectedImage: clickedImage.id // Store which image was clicked
+            selectedImage: clickedImage.id
         });
 
         if (isCorrect) {
             score++;
-            overlayText.textContent = `正确
-这是真实照片`;
+            overlayText.textContent = `正确\n这是真实照片`;
             overlay.classList.add('correct');
         } else {
-            overlayText.textContent = `抱歉
-这是AI生成的`;
+            overlayText.textContent = `抱歉\n这是AI生成的`;
             overlay.classList.add('incorrect');
         }
         overlay.classList.add('show');
 
-        // Hide the other overlay
         const otherOverlay = clickedImage === image1 ? overlay2 : overlay1;
         otherOverlay.classList.remove('show', 'correct', 'incorrect');
         otherOverlay.querySelector('.overlay-text').textContent = '';
 
-        // IMMEDIATELY UPDATE SCORE DISPLAY AFTER ANSWERING
         questionCounter.textContent = `${score}/${currentQuestionIndex + 1}`;
 
         setTimeout(() => {
             currentQuestionIndex++;
             displayQuestion();
-        }, 2000); // Show feedback for 2 seconds
+        }, 2000);
     }
 
     function startTimer() {
@@ -191,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
             timerEl.textContent = timeLeft;
             if (timeLeft <= 0) {
                 clearInterval(countdownInterval);
-                // Time's up, count as incorrect and move to next
                 userAnswers.push({
                     question: questions[currentQuestionIndex],
                     correct: false,
@@ -206,25 +192,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function endGame() {
         gameScreen.classList.add('hidden');
         endScreen.classList.remove('hidden');
-        timerContainer.classList.add('hidden'); // Hide timer
+        timerContainer.classList.add('hidden');
 
-        // Determine end message based on score
-        if (score >= 3) { // Assuming 3 correct answers for "win"
+        if (score >= 3) {
             endMessageEl.textContent = `恭喜！您答对了${score}题，请去前台领奖`;
         } else {
             endMessageEl.textContent = `抱歉！您只答对了${score}题，继续努力`;
         }
-
-        // Optionally show detailed results
-        // finalScoreEl.textContent = `你的得分: ${score} / ${TOTAL_QUESTIONS}`;
-        // resultsContainer.innerHTML = '<h3>答题详情:</h3>';
-        // userAnswers.forEach((answer, index) => {
-        //     const result = answer.correct ? '正确' : (answer.timeout ? '超时' : '错误');
-        //     resultsContainer.innerHTML += `<p>第 ${index + 1} 题 (图片 ${answer.question}): ${result}</p>`;
-        // });
     }
 
-    // --- Utility Functions ---
     function shuffleArray(array) {
         const newArr = [...array];
         for (let i = newArr.length - 1; i > 0; i--) {
@@ -264,4 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay.style.top = `${top}px`;
         overlay.style.left = `${left}px`;
     }
+
+    // Start the game initialization process
+    initializeGame();
 });

@@ -38,11 +38,16 @@ def generate_manifest():
     for base_name in sorted_keys:
         paths = file_groups[base_name]
         if 'real' in paths and 'ai' in paths and 'intro' in paths:
-            manifest.append({
-                'real': paths['real'],
-                'ai': paths['ai'],
-                'intro': paths['intro']
-            })
+            try:
+                with open(paths['intro'], 'r', encoding='utf-8') as f:
+                    intro_content = f.read()
+                manifest.append({
+                    'real': paths['real'],
+                    'ai': paths['ai'],
+                    'intro': intro_content
+                })
+            except IOError as e:
+                print(f"Warning: Could not read intro file {paths['intro']}: {e}")
 
     # Write the structured data to the manifest.json file
     try:

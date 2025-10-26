@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Game State
     const TOTAL_QUESTIONS = 5;
-    const TIME_LIMIT = 30;
+    const TIME_LIMIT = 10;
     
     let allQuestionsData = []; // Will be loaded from manifest.json
     let questions = [];
@@ -34,13 +34,226 @@ document.addEventListener('DOMContentLoaded', () => {
     let imagesClickable = true;
 
     // --- Initialization ---
-    async function initializeGame() {
+    function initializeGame() {
         try {
-            const response = await fetch('manifest.json');
-            if (!response.ok) {
-                throw new Error('Manifest file not found!');
+            // Embed the manifest data directly to allow offline use
+            allQuestionsData = [
+              {
+                "real": "01Real/上海世博展览馆.jpg",
+                "ai": "02AI/上海世博展览馆.png",
+                "intro": "上海世博展览馆"
+              },
+              {
+                "real": "01Real/上海吴淞口国际邮轮码头.jpg",
+                "ai": "02AI/上海吴淞口国际邮轮码头.png",
+                "intro": "上海吴淞口国际邮轮码头"
+              },
+              {
+                "real": "01Real/上海崇明体育训练基地一期项目（1、2、3号楼）.jpg",
+                "ai": "02AI/上海崇明体育训练基地一期项目（1、2、3号楼）.png",
+                "intro": "上海崇明体育训练基地一期项目（1、2、3号楼）"
+              },
+              {
+                "real": "01Real/上海市第一人民医院改扩建工程.jpg",
+                "ai": "02AI/上海市第一人民医院改扩建工程.png",
+                "intro": "上海市第一人民医院改扩建工程"
+              },
+              {
+                "real": "01Real/上海棋院.jpg",
+                "ai": "02AI/上海棋院.png",
+                "intro": "上海棋院"
+              },
+              {
+                "real": "01Real/上海自然博物馆.jpg",
+                "ai": "02AI/上海自然博物馆.png",
+                "intro": "上海自然博物馆"
+              },
+              {
+                "real": "01Real/上音歌剧院.jpg",
+                "ai": "02AI/上音歌剧院.png",
+                "intro": "上音歌剧院"
+              },
+              {
+                "real": "01Real/二里头遗址博物馆.jpg",
+                "ai": "02AI/二里头遗址博物馆.png",
+                "intro": "二里头遗址博物馆"
+              },
+              {
+                "real": "01Real/保利大剧院.jpg",
+                "ai": "02AI/保利大剧院.png",
+                "intro": "保利大剧院"
+              },
+              {
+                "real": "01Real/北京建筑大学新校区图书馆.jpg",
+                "ai": "02AI/北京建筑大学新校区图书馆.png",
+                "intro": "北京建筑大学新校区图书馆"
+              },
+              {
+                "real": "01Real/南开大学新校区环境科学与工程学院.jpg",
+                "ai": "02AI/南开大学新校区环境科学与工程学院.png",
+                "intro": "南开大学新校区环境科学与工程学院"
+              },
+              {
+                "real": "01Real/南开大学津南校区学生活动中心.jpg",
+                "ai": "02AI/南开大学津南校区学生活动中心.png",
+                "intro": "南开大学津南校区学生活动中心"
+              },
+              {
+                "real": "01Real/南沙国际金融论坛（IFF）永久会址.jpg",
+                "ai": "02AI/南沙国际金融论坛（IFF）永久会址.png",
+                "intro": "南沙国际金融论坛（IFF）永久会址"
+              },
+              {
+                "real": "01Real/古北SOHO.jpg",
+                "ai": "02AI/古北SOHO.png",
+                "intro": "古北SOHO"
+              },
+              {
+                "real": "01Real/同济大学新建嘉定校区体育中心项目.jpg",
+                "ai": "02AI/同济大学新建嘉定校区体育中心项目.png",
+                "intro": "同济大学新建嘉定校区体育中心项目"
+              },
+              {
+                "real": "01Real/同济科技园A楼.jpg",
+                "ai": "02AI/同济科技园A楼.png",
+                "intro": "同济科技园A楼"
+              },
+              {
+                "real": "01Real/咸阳市市民文化中心.jpg",
+                "ai": "02AI/咸阳市市民文化中心.png",
+                "intro": "咸阳市市民文化中心"
+              },
+              {
+                "real": "01Real/哈大客专大连北站站房工程.jpg",
+                "ai": "02AI/哈大客专大连北站站房工程.png",
+                "intro": "哈大客专大连北站站房工程"
+              },
+              {
+                "real": "01Real/大同市北环路御河桥工程.jpg",
+                "ai": "02AI/大同市北环路御河桥工程.png",
+                "intro": "大同市北环路御河桥工程"
+              },
+              {
+                "real": "01Real/太原市摄乐大桥工程.jpg",
+                "ai": "02AI/太原市摄乐大桥工程.png",
+                "intro": "太原市摄乐大桥工程"
+              },
+              {
+                "real": "01Real/如东县体育中心体育馆.jpg",
+                "ai": "02AI/如东县体育中心体育馆.png",
+                "intro": "如东县体育中心体育馆"
+              },
+              {
+                "real": "01Real/宁波院士中心.jpg",
+                "ai": "02AI/宁波院士中心.png",
+                "intro": "宁波院士中心"
+              },
+              {
+                "real": "01Real/山东美术馆新馆.png",
+                "ai": "02AI/山东美术馆新馆.png",
+                "intro": "山东美术馆新馆"
+              },
+              {
+                "real": "01Real/援非盟会议中心.jpg",
+                "ai": "02AI/援非盟会议中心.png",
+                "intro": "援非盟会议中心"
+              },
+              {
+                "real": "01Real/无锡大剧院.jpg",
+                "ai": "02AI/无锡大剧院.png",
+                "intro": "无锡大剧院"
+              },
+              {
+                "real": "01Real/无锡阖闾城遗址博物馆.jpg",
+                "ai": "02AI/无锡阖闾城遗址博物馆.png",
+                "intro": "无锡阖闾城遗址博物馆"
+              },
+              {
+                "real": "01Real/日喀则桑珠孜宗堡修复工程.png",
+                "ai": "02AI/日喀则桑珠孜宗堡修复工程.png",
+                "intro": "日喀则桑珠孜宗堡修复工程"
+              },
+              {
+                "real": "01Real/昆山市专业足球场.png",
+                "ai": "02AI/昆山市专业足球场.png",
+                "intro": "昆山市专业足球场"
+              },
+              {
+                "real": "01Real/杨树浦电厂遗址公园.jpg",
+                "ai": "02AI/杨树浦电厂遗址公园.png",
+                "intro": "杨树浦电厂遗址公园"
+              },
+              {
+                "real": "01Real/椒江二桥.jpg",
+                "ai": "02AI/椒江二桥.png",
+                "intro": "椒江二桥"
+              },
+              {
+                "real": "01Real/江苏省苏州实验中学原址重建项目.jpg",
+                "ai": "02AI/江苏省苏州实验中学原址重建项目.png",
+                "intro": "江苏省苏州实验中学原址重建项目"
+              },
+              {
+                "real": "01Real/沃尔沃汽车（中国）研发中心建设项目（二期）.jpg",
+                "ai": "02AI/沃尔沃汽车（中国）研发中心建设项目（二期）.png",
+                "intro": "沃尔沃汽车（中国）研发中心建设项目（二期）"
+              },
+              {
+                "real": "01Real/浙江省公安指挥中心.jpg",
+                "ai": "02AI/浙江省公安指挥中心.png",
+                "intro": "浙江省公安指挥中心"
+              },
+              {
+                "real": "01Real/深圳歌剧院.jpg",
+                "ai": "02AI/深圳歌剧院.jpg",
+                "intro": "深圳歌剧院"
+              },
+              {
+                "real": "01Real/滇海古渡大码头.jpg",
+                "ai": "02AI/滇海古渡大码头.png",
+                "intro": "滇海古渡大码头"
+              },
+              {
+                "real": "01Real/范曾艺术馆.jpg",
+                "ai": "02AI/范曾艺术馆.png",
+                "intro": "范曾艺术馆"
+              },
+              {
+                "real": "01Real/西安丝路国际会议中心.jpg",
+                "ai": "02AI/西安丝路国际会议中心.png",
+                "intro": "西安丝路国际会议中心"
+              },
+              {
+                "real": "01Real/重庆西站.jpg",
+                "ai": "02AI/重庆西站.png",
+                "intro": "重庆西站"
+              },
+              {
+                "real": "01Real/金融街海伦中心.jpg",
+                "ai": "02AI/金融街海伦中心.png",
+                "intro": "金融街海伦中心"
+              },
+              {
+                "real": "01Real/长沙国际会展中心 .jpg",
+                "ai": "02AI/长沙国际会展中心 .png",
+                "intro": "长沙国际会展中心 "
+              },
+              {
+                "real": "01Real/闸北久光.jpg",
+                "ai": "02AI/闸北久光.png",
+                "intro": "闸北久光"
+              },
+              {
+                "real": "01Real/隋唐大运河文化博物馆.jpg",
+                "ai": "02AI/隋唐大运河文化博物馆.png",
+                "intro": "隋唐大运河文化博物馆"
+              }
+            ];
+
+            if (!allQuestionsData || allQuestionsData.length === 0) {
+                 throw new Error('Embedded game data is empty or invalid!');
             }
-            allQuestionsData = await response.json();
+            
             // Enable the start button only after data is loaded
             startGameBtn.addEventListener('click', startGame);
             restartBtn.addEventListener('click', startGame);
@@ -48,21 +261,13 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Failed to load game data:', error);
             // Display an error message to the user
             const startContent = document.querySelector('.start-content');
-            startContent.innerHTML = '<p style="color: red;">游戏数据加载失败，请检查manifest.json文件是否存在且格式正确。</p>';
+            startContent.innerHTML = '<p style="color: red;">游戏数据加载失败，请联系管理员。</p>';
         }
     }
 
     // --- Event Listeners ---
     image1.addEventListener('click', (event) => handleImageClick(image1, overlay1, overlayText1, event));
     image2.addEventListener('click', (event) => handleImageClick(image2, overlay2, overlayText2, event));
-    image1.onload = () => adjustOverlaySize(image1, overlay1);
-    image2.onload = () => adjustOverlaySize(image2, overlay2);
-    window.addEventListener('resize', () => {
-        if (!gameScreen.classList.contains('hidden')) {
-            adjustOverlaySize(image1, overlay1);
-            adjustOverlaySize(image2, overlay2);
-        }
-    });
 
     // --- Game Flow ---
     function startGame() {
@@ -85,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
         displayQuestion();
     }
 
-    async function displayQuestion() {
+    function displayQuestion() {
         if (currentQuestionIndex >= TOTAL_QUESTIONS) {
             endGame();
             return;
@@ -96,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentQuestion = questions[currentQuestionIndex];
         const realImagePath = currentQuestion.real;
         const aiImagePath = currentQuestion.ai;
-        const introPath = currentQuestion.intro;
+        const introContent = currentQuestion.intro;
 
         const isRealLeft = Math.random() < 0.5;
 
@@ -112,34 +317,17 @@ document.addEventListener('DOMContentLoaded', () => {
         overlayText2.textContent = '';
         imagesClickable = true;
 
-        try {
-            const response = await fetch(introPath);
-            if (response.ok) {
-                introText.textContent = await response.text();
-            } else {
-                introText.textContent = '介绍文本加载失败。';
-            }
-        } catch (error) {
-            console.error('Error fetching introduction:', error);
-            introText.textContent = '无法加载介绍文本。';
-        }
+        introText.textContent = introContent;
 
         startTimer();
     }
 
     function handleImageClick(clickedImage, overlay, overlayText, event) {
-        const { renderedWidth, renderedHeight, top, left } = getRenderedSize(clickedImage);
-
-        if (event.offsetX < left || event.offsetX > left + renderedWidth ||
-            event.offsetY < top || event.offsetY > top + renderedHeight) {
-            return;
-        }
-
         if (!imagesClickable) return;
         imagesClickable = false;
 
         clearInterval(countdownInterval);
-        const isCorrect = clickedImage.dataset.isReal === 'true';
+        const isCorrect = clickedImage.dataset.isReal === 'false';
         
         userAnswers.push({
             question: questions[currentQuestionIndex],
@@ -149,10 +337,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isCorrect) {
             score++;
-            overlayText.textContent = `正确\n这是真实照片`;
+            overlayText.textContent = `正确~这是AI模仿的建筑图片~`;
             overlay.classList.add('correct');
         } else {
-            overlayText.textContent = `抱歉\n这是AI生成的`;
+            overlayText.textContent = `抱歉猜错了~这是真实图片~`;
             overlay.classList.add('incorrect');
         }
         overlay.classList.add('show');
@@ -210,36 +398,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return newArr;
     }
 
-    function getRenderedSize(img) {
-        const container = img.parentElement;
-        const containerWidth = container.offsetWidth;
-        const containerHeight = container.offsetHeight;
-        const imageAspectRatio = img.naturalWidth / img.naturalHeight;
-        const containerAspectRatio = containerWidth / containerHeight;
-
-        let renderedWidth, renderedHeight, top, left;
-
-        if (imageAspectRatio > containerAspectRatio) {
-            renderedWidth = containerWidth;
-            renderedHeight = containerWidth / imageAspectRatio;
-            top = (containerHeight - renderedHeight) / 2;
-            left = 0;
-        } else {
-            renderedHeight = containerHeight;
-            renderedWidth = containerHeight * imageAspectRatio;
-            left = (containerWidth - renderedWidth) / 2;
-            top = 0;
-        }
-        return { renderedWidth, renderedHeight, top, left };
-    }
-
-    function adjustOverlaySize(img, overlay) {
-        const { renderedWidth, renderedHeight, top, left } = getRenderedSize(img);
-        overlay.style.width = `${renderedWidth}px`;
-        overlay.style.height = `${renderedHeight}px`;
-        overlay.style.top = `${top}px`;
-        overlay.style.left = `${left}px`;
-    }
 
     // Start the game initialization process
     initializeGame();

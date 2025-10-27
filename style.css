@@ -19,6 +19,10 @@ body {
     overflow: hidden; /* Hide overflow */
     box-sizing: border-box;
     position: relative;
+    background-image: url('00Tjad/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 
@@ -81,7 +85,7 @@ header h2 {
     display: flex;
     justify-content: flex-end;
     position: relative;
-    right: 100px; /* Move further left */
+    right: 120px; /* 右上文字大小调整 */
 }
 
 #score-display {
@@ -96,11 +100,11 @@ header h2 {
 #score-display p {
     margin: 0;
     text-align: right;
-    font-size: 36px; /* Match number size */
+    font-size: 32px; /* 右上五题三胜文字大小 */
 }
 
 #question-counter {
-    font-size: 48px; /* Increase font size */
+    font-size: 40px; /* 右上得分板文字大小调整 */
     font-weight: bold;
     color: #fff; /* Changed to white */
 }
@@ -135,13 +139,13 @@ main {
 }
 
 .start-content {
-    margin-top: 80px; /* Adjust spacing */
+    margin-top: 50px; /* Adjust spacing */
 }
 
 .action-button {
     cursor: pointer;
     transition: transform 0.2s ease;
-    width: 250px; /* Set a width for the image button */
+    width: 450px; /* 开始按钮大小 */
     height: auto;
 }
 
@@ -245,7 +249,7 @@ main {
 }
 
 #intro-text {
-    margin-top: 0; /* Stick to the image container */
+    margin-top: 20px; /* 修改文本框上下位置，如果是0就紧贴图片 */
     padding: 20px 30px;
     background-color: rgba(34, 34, 34, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -259,22 +263,22 @@ main {
     display: flex;
     justify-content: flex-start; /* Align text to the left */
     align-items: center;
-    font-size: 20px;
+    font-size: 30px;/* 修改项目介绍文字的大小 */
     line-height: 1.6;
     font-family: 'AlimamaShuHeiTi-Bold', sans-serif;
 }
 
 #timer-container {
-    font-size: 32px;
+    font-size: 40px;
     font-weight: bold;
     color: #fff;
     position: relative;
-    left: 80px; /* Move further to the right */
+    left: 120px; /* Move further to the right */
     font-family: 'AlimamaShuHeiTi-Bold', sans-serif;
 }
 
 #timer {
-    color: #e74c3c; /* Red color for timer */
+    color: #FFFFFF; /* Red color for timer */
 }
 
 #end-screen #end-message {
@@ -307,26 +311,4 @@ main {
 
 #results-container p {
     margin: 5px 0;
-}
-
-footer {
-    width: 100%;
-    max-width: 1920px;
-    padding: 15px 120px; /* Adjust padding to move logos inwards */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-sizing: border-box;
-    flex-shrink: 0;
-    position: absolute;
-    bottom: 10px;
-}
-
-.footer-logo {
-    height: 70px;
-    width: auto;
-}
-
-#logo {
-    height: 120px; /* Specific larger size for the left logo */
 }

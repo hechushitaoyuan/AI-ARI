@@ -296,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        questionCounter.textContent = `${score}/${currentQuestionIndex + 1}`;
+        questionCounter.textContent = `${score}/${TOTAL_QUESTIONS}`;
 
         const currentQuestion = questions[currentQuestionIndex];
         const realImagePath = currentQuestion.real;
@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
         otherOverlay.classList.remove('show', 'correct', 'incorrect');
         otherOverlay.querySelector('.overlay-text').textContent = '';
 
-        questionCounter.textContent = `${score}/${currentQuestionIndex + 1}`;
+        questionCounter.textContent = `${score}/${TOTAL_QUESTIONS}`;
 
         setTimeout(() => {
             currentQuestionIndex++;

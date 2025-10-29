@@ -145,8 +145,15 @@ main {
 .action-button {
     cursor: pointer;
     transition: transform 0.2s ease;
-    width: 450px; /* 开始按钮大小 */
     height: auto;
+}
+
+#start-game-btn {
+    width: 600px; /* Set a width for the image button */
+}
+
+#restart-btn {
+    width: 400px; /* Set a width for the image button */
 }
 
 .action-button:hover {
@@ -166,11 +173,11 @@ main {
     text-align: center;
     margin-top: 0;
     color: #fff;
-    font-size: 28px;
+    font-size: 36px;
 }
 
 .rules-container p {
-    font-size: 22px;
+    font-size: 24px;
     line-height: 1.8;
 }
 
@@ -261,7 +268,7 @@ main {
     color: #fff;
     flex-shrink: 0;
     display: flex;
-    justify-content: flex-start; /* Align text to the left */
+    justify-content: center; /* 掉漆格式 flex-start左对齐 center居中*/
     align-items: center;
     font-size: 30px;/* 修改项目介绍文字的大小 */
     line-height: 1.6;

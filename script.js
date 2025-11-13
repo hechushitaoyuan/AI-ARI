@@ -437,7 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
         timerContainer.classList.add('hidden');
 
         if (score >= 3) {
-            endMessageEl.textContent = `恭喜！您答对了${score}题，请去前台领奖`;
+            endMessageEl.textContent = `恭喜！您答对了${score}题`;
         } else {
             endMessageEl.textContent = `抱歉！您只答对了${score}题，继续努力`;
         }

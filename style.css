@@ -1,4 +1,4 @@
-@font-face {
+﻿@font-face {
     font-family: 'AlimamaShuHeiTi-Bold';
     src: url('00Tjad/AlimamaShuHeiTi-Bold.ttf') format('truetype');
     font-weight: normal;
@@ -188,7 +188,7 @@ main {
     gap: 40px;
     width: 100%;
     max-width: 1600px; /* Widen the container further */
-    height: 55vh;
+    height: 45vh;
     margin-top: 20px;
 }
 
